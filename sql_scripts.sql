@@ -1,0 +1,18 @@
+CREATE SCHEMA student_database;
+
+CREATE TABLE groups (
+  id BIGINT PRIMARY KEY IDENTITY,
+  group_number INTEGER NOT NULL,
+  faculty VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE students (
+  id BIGINT PRIMARY KEY IDENTITY ,
+  lastName VARCHAR(255) NOT NULL,
+  firstName VARCHAR(255) NOT NULL,
+  patronymic VARCHAR(255) NOT NULL,
+  birthday DATE NOT NULL,
+  group_id BIGINT NOT NULL,
+  FOREIGN KEY (group_id) REFERENCES STUDENT_DATABASE.GROUPS(ID)
+);
+
