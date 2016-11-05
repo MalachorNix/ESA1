@@ -10,7 +10,7 @@ public class GroupDAOImpl extends GenericDAOImpl implements GroupDAO {
     public Group getByNumberAndFaculty(int groupNumber, String faculty) {
         Session session = getSession();
         session.beginTransaction();
-        Query query = session.createQuery("from com.haulmont.testtask.entities.Group where groupNumber = :num and faculty = :faculty");
+        Query query = session.createQuery("from Group where groupNumber = :num and faculty = :faculty");
         query.setLong("num", groupNumber);
         query.setString("faculty", faculty);
         Group group = (Group) query.uniqueResult();
