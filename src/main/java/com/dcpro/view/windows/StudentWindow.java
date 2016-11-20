@@ -121,6 +121,7 @@ public abstract class StudentWindow extends Window {
         form.setSpacing(true);
         groupCombo.addFocusListener(focusEvent ->  {
             List<Group> list = groupDAO.findAll(Group.class);
+            groupCombo.removeAllItems();
             groupCombo.addItems(list);
         });
     }
