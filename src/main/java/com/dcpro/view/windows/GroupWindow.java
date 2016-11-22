@@ -3,6 +3,7 @@ package com.dcpro.view.windows;
 import com.dcpro.entities.Group;
 import com.dcpro.dao.GroupDAO;
 import com.dcpro.dao.GroupDAOImpl;
+import com.dcpro.view.NotificationUtils;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 
@@ -97,7 +98,8 @@ public abstract class GroupWindow extends Window {
             groupNumber = Integer.parseInt(groupNumberField.getValue().trim());
             faculty = facultyField.getValue().trim();
             if (dao.getByNumberAndFaculty(groupNumber, faculty) != null) {
-                Notification.show("Группа уже существует!", Notification.Type.ERROR_MESSAGE);
+                NotificationUtils
+                        .showNotification("Группа уже существует!");
                 return false;
             }
             if (group == null) {
@@ -105,13 +107,13 @@ public abstract class GroupWindow extends Window {
             }
             group.setGroupNumber(groupNumber);
             group.setFaculty(faculty);
-            if(faculty.length() == 0) {
-                Notification.show("Введите название факультета!", Notification.Type.ERROR_MESSAGE);
+            if (faculty.length() == 0) {
+                NotificationUtils.showNotification("Введите название факультета!");
                 return false;
             }
         } catch (NumberFormatException e) {
-            Notification.show("Введите номер группы! Он должен быть целым положительным числом",
-                    Notification.Type.ERROR_MESSAGE);
+            NotificationUtils.showNotification("Введите номер группы! Он должен быть целым положительным числом"
+            );
             return false;
         }
         return true;

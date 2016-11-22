@@ -3,6 +3,7 @@ package com.dcpro.view.tabs;
 import com.dcpro.dao.StudentDAO;
 import com.dcpro.dao.StudentDAOImpl;
 import com.dcpro.entities.Student;
+import com.dcpro.view.NotificationUtils;
 import com.dcpro.view.windows.EditStudentWindow;
 import com.dcpro.view.windows.StudentWindow;
 import com.dcpro.view.windows.AddStudentWindow;
@@ -80,7 +81,7 @@ public class StudentTab extends VerticalLayout implements ComponentContainer {
     }
 
     private void studentNotSelectedWarning() {
-        Notification.show("Студент не выбран", Notification.Type.WARNING_MESSAGE);
+        NotificationUtils.showNotification("Студент не выбран");
     }
 
     private void refreshTable() {

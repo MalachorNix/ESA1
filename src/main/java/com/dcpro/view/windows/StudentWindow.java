@@ -6,6 +6,7 @@ import com.dcpro.entities.Group;
 import com.dcpro.entities.Student;
 import com.dcpro.dao.GroupDAO;
 import com.dcpro.dao.GroupDAOImpl;
+import com.dcpro.view.NotificationUtils;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 
@@ -119,7 +120,7 @@ public abstract class StudentWindow extends Window {
         groupCombo.setRequired(true);
         form.setMargin(true);
         form.setSpacing(true);
-        groupCombo.addFocusListener(focusEvent ->  {
+        groupCombo.addFocusListener(focusEvent -> {
             List<Group> list = groupDAO.findAll(Group.class);
             groupCombo.removeAllItems();
             groupCombo.addItems(list);
@@ -148,20 +149,26 @@ public abstract class StudentWindow extends Window {
         fields.add(secondNameField);
         for (TextField field : fields) {
             if (field.getValue().length() == 0) {
-                Notification.show("Поле " + field.getCaption() + " не заполнено", Notification.Type.ERROR_MESSAGE);
+                NotificationUtils
+                        .showNotification("Поле " + field.getCaption() + " не заполнено"
+                        );
                 return false;
             }
         }
 
         if (birthDateField.getValue() == null) {
-            Notification.show("Поле " + birthDateField.getCaption() + " не заполнено", Notification.Type.ERROR_MESSAGE);
+            NotificationUtils
+                    .showNotification("Поле " + birthDateField.getCaption() + " не заполнено"
+                    );
             return false;
         }
         long date = birthDateField.getValue().getTime();
         birthDate = new Date(date);
 
         if (group == null) {
-            Notification.show("Поле " + groupCombo.getCaption() + " не заполнено", Notification.Type.ERROR_MESSAGE);
+            NotificationUtils
+                    .showNotification("Поле " + groupCombo.getCaption() + " не заполнено"
+                    );
             return false;
         }
 

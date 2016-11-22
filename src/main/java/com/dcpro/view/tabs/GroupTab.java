@@ -2,6 +2,7 @@ package com.dcpro.view.tabs;
 
 import com.dcpro.dao.GroupDAOImpl;
 import com.dcpro.entities.Group;
+import com.dcpro.view.NotificationUtils;
 import com.dcpro.view.windows.AddGroupWindow;
 import com.dcpro.view.windows.EditGroupWindow;
 import com.dcpro.view.windows.GroupWindow;
@@ -79,8 +80,8 @@ public class GroupTab extends VerticalLayout implements ComponentContainer {
             try {
                 dao.delete(group);
             } catch (ConstraintViolationException e) {
-                Notification.show("Нельзя удалить группу, пока в ней есть студенты. " +
-                        "Удалите из нее студентов, затем повторите попытку.", Notification.Type.WARNING_MESSAGE);
+                NotificationUtils.showNotification("Нельзя удалить группу, пока в ней есть студенты. " +
+                        "Удалите из нее студентов, затем повторите попытку.");
             } finally {
                 refreshTable();
             }
@@ -90,7 +91,7 @@ public class GroupTab extends VerticalLayout implements ComponentContainer {
     }
 
     private void groupNotSelectedWarning() {
-        Notification.show("Группа не выбрана!", Notification.Type.WARNING_MESSAGE);
+        NotificationUtils.showNotification("Группа не выбрана!");
     }
 
     private void refreshTable() {
