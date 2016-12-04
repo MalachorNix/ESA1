@@ -16,7 +16,7 @@ public class AddStudentWindow extends StudentWindow {
     private void addStudent() {
         if (super.isValidFieldData()) {
             Student student = new Student(getFirstName(), getSecondName(), getLastName(), getBirthDate(), getGroup());
-            this.getDao().save(student);
+            this.getDao().commitEntity(student);
             this.close();
         }
     }

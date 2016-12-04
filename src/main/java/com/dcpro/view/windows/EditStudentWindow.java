@@ -13,7 +13,7 @@ public class EditStudentWindow extends StudentWindow {
 
     private void updateStudent() {
         if (super.isValidFieldData()) {
-            this.getDao().update(getStudent());
+            this.getDao().mergeEntity(getStudent());
             this.close();
         }
     }

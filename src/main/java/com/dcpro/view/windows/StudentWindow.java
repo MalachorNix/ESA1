@@ -1,15 +1,15 @@
 package com.dcpro.view.windows;
 
-import com.dcpro.dao.StudentDAO;
-import com.dcpro.dao.StudentDAOImpl;
+import com.dcpro.dao.*;
 import com.dcpro.entities.Group;
 import com.dcpro.entities.Student;
-import com.dcpro.dao.GroupDAO;
-import com.dcpro.dao.GroupDAOImpl;
 import com.dcpro.view.NotificationUtils;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,6 @@ public abstract class StudentWindow extends Window {
     private final HorizontalLayout buttonsLayout = new HorizontalLayout();
     private final Button okButton = new Button("OK", FontAwesome.CHECK);
     private final Button cancelButton = new Button("Отмена", FontAwesome.CLOSE);
-    private final StudentDAO dao = new StudentDAOImpl();
     private final TextField lastNameField = new TextField("Фамилия");
     private final TextField firstNameField = new TextField("Имя");
     private final TextField secondNameField = new TextField("Отчество");
@@ -33,10 +32,16 @@ public abstract class StudentWindow extends Window {
     private Date birthDate;
     private Group group;
     private Student student;
-    private final GroupDAO groupDAO = new GroupDAOImpl();
+    protected DAOService daoService;
+
+    public DAOService getDaoService() {
+        return daoService;
+    }
 
     public StudentWindow() {
         super();
+        Injector injector = Guice.createInjector(new DAOModule());
+        daoService = injector.getInstance(DAOService.class);
         formInit();
         setModal(true);
         setContent(form);
@@ -58,9 +63,6 @@ public abstract class StudentWindow extends Window {
         return cancelButton;
     }
 
-    public StudentDAO getDao() {
-        return dao;
-    }
 
     public TextField getLastNameField() {
         return lastNameField;
@@ -102,10 +104,6 @@ public abstract class StudentWindow extends Window {
         return group;
     }
 
-    public GroupDAO getGroupDAO() {
-        return groupDAO;
-    }
-
     public Student getStudent() {
         return student;
     }
@@ -121,10 +119,14 @@ public abstract class StudentWindow extends Window {
         form.setMargin(true);
         form.setSpacing(true);
         groupCombo.addFocusListener(focusEvent -> {
-            List<Group> list = groupDAO.findAll(Group.class);
+            List<Group> list = getDao().getEntities(Group.class);
             groupCombo.removeAllItems();
             groupCombo.addItems(list);
         });
+    }
+
+    public DAOService getDao() {
+        return daoService;
     }
 
     private void buttonsLayoutInit() {

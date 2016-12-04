@@ -16,7 +16,8 @@ public class AddGroupWindow extends GroupWindow {
     private void addGroup() {
         if (super.isValidFieldData()) {
             Group group = new Group(this.getGroupNumber(), this.getFaculty());
-            this.getDao().save(group);
+//            this.getDao().save(group);
+            this.getDao().commitEntity(group);
             this.close();
         }
     }

@@ -11,9 +11,9 @@ public class Student implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "student_id")
-    private Long id;
+    private Long studentId;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -51,12 +51,12 @@ public class Student implements Serializable {
         this.group = group;
     }
 
-    public Long getId() {
-        return id;
+    public Long getStudentId() {
+        return studentId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setStudentId(Long id) {
+        this.studentId = id;
     }
 
     public String getFirstName() {
@@ -94,7 +94,7 @@ public class Student implements Serializable {
     @Override
     public String toString() {
         return "entities.Student{" +
-                "id=" + id +
+                "id=" + studentId +
                 ", firstName='" + firstName + '\'' +
                 ", secondName='" + secondName + '\'' +
                 ", lastName='" + lastName + '\'' +

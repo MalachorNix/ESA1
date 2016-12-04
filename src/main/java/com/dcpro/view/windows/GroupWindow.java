@@ -1,9 +1,13 @@
 package com.dcpro.view.windows;
 
+import com.dcpro.dao.DAOModule;
+import com.dcpro.dao.DAOService;
 import com.dcpro.entities.Group;
 import com.dcpro.dao.GroupDAO;
 import com.dcpro.dao.GroupDAOImpl;
 import com.dcpro.view.NotificationUtils;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 
@@ -15,13 +19,16 @@ public abstract class GroupWindow extends Window {
     private final TextField facultyField = new TextField("Факультет");
     private final Button okButton = new Button("OK", FontAwesome.CHECK);
     private final Button cancelButton = new Button("Отмена", FontAwesome.CLOSE);
-    private final GroupDAO dao = new GroupDAOImpl();
+//    private final GroupDAO dao = new GroupDAOImpl();
     private int groupNumber;
     private String faculty;
     private Group group;
+    protected DAOService daoService;
 
     public GroupWindow() {
         super();
+        Injector injector = Guice.createInjector(new DAOModule());
+        daoService = injector.getInstance(DAOService.class);
         formInit();
         setModal(true);
         setContent(form);
@@ -51,8 +58,8 @@ public abstract class GroupWindow extends Window {
         return cancelButton;
     }
 
-    public GroupDAO getDao() {
-        return dao;
+    public DAOService getDao() {
+        return daoService;
     }
 
     public int getGroupNumber() {
@@ -97,7 +104,7 @@ public abstract class GroupWindow extends Window {
         try {
             groupNumber = Integer.parseInt(groupNumberField.getValue().trim());
             faculty = facultyField.getValue().trim();
-            if (dao.getByNumberAndFaculty(groupNumber, faculty) != null) {
+            if (daoService.getByNumberAndFaculty(groupNumber, faculty) != null) {
                 NotificationUtils
                         .showNotification("Группа уже существует!");
                 return false;

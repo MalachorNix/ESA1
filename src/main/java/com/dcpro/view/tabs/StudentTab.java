@@ -1,8 +1,7 @@
 package com.dcpro.view.tabs;
 
-import com.dcpro.dao.StudentDAO;
-import com.dcpro.dao.StudentDAOImpl;
 import com.dcpro.entities.Student;
+import com.dcpro.view.AbstractView;
 import com.dcpro.view.NotificationUtils;
 import com.dcpro.view.windows.EditStudentWindow;
 import com.dcpro.view.windows.StudentWindow;
@@ -16,11 +15,11 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.renderers.DateRenderer;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class StudentTab extends VerticalLayout implements ComponentContainer {
+public class StudentTab extends AbstractView implements ComponentContainer {
 
     private final Grid grid = new Grid();
     private final BeanItemContainer<Student> students = new BeanItemContainer<>(Student.class);
-    private final StudentDAO dao = new StudentDAOImpl();
+//    private final StudentDAO dao = new StudentDAOImpl();
     private final Button addButton = new Button("Добавить студента", FontAwesome.PLUS);
     private final Button editButton = new Button("Редактировать студента", FontAwesome.EDIT);
     private final Button removeButton = new Button("Удалить студента", FontAwesome.REMOVE);
@@ -33,6 +32,7 @@ public class StudentTab extends VerticalLayout implements ComponentContainer {
     private Grid.HeaderRow filterRow = grid.appendHeaderRow();
 
     public StudentTab() {
+        super();
         refreshTable();
         tableInit();
         setMargin(true);
@@ -73,7 +73,12 @@ public class StudentTab extends VerticalLayout implements ComponentContainer {
     private void removeStudent() {
         Student student = (Student) grid.getSelectedRow();
         if (student != null) {
-            dao.delete(student);
+//            dao.delete(student);
+            try {
+                daoService.deleteEntity(student.getStudentId(), Student.class);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             refreshTable();
         } else {
             studentNotSelectedWarning();
@@ -86,7 +91,8 @@ public class StudentTab extends VerticalLayout implements ComponentContainer {
 
     private void refreshTable() {
         students.removeAllItems();
-        students.addAll(dao.findAll(Student.class));
+//        students.addAll(dao.findAll(Student.class));
+        students.addAll(daoService.getEntities(Student.class));
     }
 
     private void tableInit() {
@@ -95,7 +101,7 @@ public class StudentTab extends VerticalLayout implements ComponentContainer {
 
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         grid.setColumnOrder("lastName", "firstName", "secondName", "birthDate", "group");
-        grid.removeColumn("id");
+        grid.removeColumn("studentId");
         Grid.Column lastNameColumn = grid.getColumn("lastName");
         lastNameColumn.setHeaderCaption("Фамилия");
         Grid.Column firstNameColumn = grid.getColumn("firstName");

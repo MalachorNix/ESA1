@@ -4,20 +4,28 @@ import com.dcpro.entities.Group;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceContext;
+import javax.inject.Singleton;
+import javax.persistence.*;
 
+@Singleton
 public class GroupDAOImpl extends GenericDAOImpl implements GroupDAO {
 
-    @PersistenceContext(unitName = "sample")
-    private EntityManager entityManager;
+//    @PersistenceContext(unitName = "sample")
+//    private EntityManager entityManager;
+
+    private EntityManagerFactory factory;
+
+
+    public GroupDAOImpl() {
+        factory = Persistence.createEntityManagerFactory("lib-app");
+    }
 
     @Override
     public Group getByNumberAndFaculty(int groupNumber, String faculty) {
 //        Session session = getSession();
 //        session.beginTransaction();
 //        Query query = session.createQuery("from Group where groupNumber = :num and faculty = :faculty");
+        EntityManager entityManager = factory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         javax.persistence.Query query = entityManager
                 .createQuery("from Group where groupNumber = :num and faculty = :faculty");

@@ -4,6 +4,7 @@ import com.dcpro.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.exception.ConstraintViolationException;
 
+import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public abstract class GenericDAOImpl<T, PK extends Serializable> implements GenericDAO {
 
-    @PersistenceContext(unitName = "sample")
+//    @PersistenceContext(unitName = "sample")
     private EntityManager entityManager;
 
     protected Session getSession() {
