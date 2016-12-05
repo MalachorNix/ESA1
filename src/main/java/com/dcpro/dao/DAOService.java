@@ -6,8 +6,8 @@ import com.google.inject.Singleton;
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 
 import javax.persistence.*;
+import java.sql.SQLException;
 import java.util.List;
-import java.util.Objects;
 
 @Singleton
 public class DAOService {
@@ -55,16 +55,19 @@ public class DAOService {
 
         String entityName = clazz.getSimpleName();
         String columnIdName = entityName.toLowerCase() + "Id";
-//            entityName = entityName.substring(0, 1).toUpperCase() + entityName.substring(1);
         String queryString = String.format("select e from %s e where e." + columnIdName + " = :id", entityName);
         Query query = em.createQuery(queryString, clazz);
         query.setParameter("id", entityId);
         Object entity = query.getSingleResult();
 
-        EntityTransaction transaction = em.getTransaction();
-        transaction.begin();
-        em.remove(entity);
-        transaction.commit();
+        try {
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+            em.remove(entity);
+            transaction.commit();
+        } catch (Exception e) {
+            throw new MySQLIntegrityConstraintViolationException();
+        }
     }
 
     public Group getByNumberAndFaculty(int groupNumber, String faculty) {

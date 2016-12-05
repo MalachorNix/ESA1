@@ -1,24 +1,20 @@
 package com.dcpro.view.tabs;
 
-import com.dcpro.dao.GroupDAOImpl;
 import com.dcpro.entities.Group;
 import com.dcpro.view.AbstractView;
 import com.dcpro.view.NotificationUtils;
 import com.dcpro.view.windows.AddGroupWindow;
 import com.dcpro.view.windows.EditGroupWindow;
 import com.dcpro.view.windows.GroupWindow;
-import com.dcpro.dao.GroupDAO;
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
-import org.hibernate.exception.ConstraintViolationException;
 
 public class GroupTab extends AbstractView implements ComponentContainer {
 
     private final Grid grid = new Grid();
     private final BeanItemContainer<Group> groups = new BeanItemContainer<>(Group.class);
-    //    private final GroupDAO dao = new GroupDAOImpl();
     private final Button addButton = new Button("Добавить группу", FontAwesome.PLUS);
     private final Button editButton = new Button("Редактировать группу", FontAwesome.EDIT);
     private final Button removeButton = new Button("Удалить группу", FontAwesome.REMOVE);
@@ -74,14 +70,13 @@ public class GroupTab extends AbstractView implements ComponentContainer {
         grid.removeColumn("groupId");
         grid.removeColumn("students");
         grid.setImmediate(true);
-        grid.setHeight(100f, Unit.PERCENTAGE); //
+        grid.setHeight(100f, Unit.PERCENTAGE);
     }
 
     private void removeGroup() {
         final Group group = (Group) grid.getSelectedRow();
         if (group != null) {
             try {
-//                dao.delete(group);
                 daoService.deleteEntity(group.getGroupId(), Group.class);
             } catch (MySQLIntegrityConstraintViolationException e) {
                 NotificationUtils.showNotification("Нельзя удалить группу, пока в ней есть студенты. " +
@@ -100,7 +95,6 @@ public class GroupTab extends AbstractView implements ComponentContainer {
 
     private void refreshTable() {
         groups.removeAllItems();
-//        groups.addAll(dao.findAll(Group.class));
         groups.addAll(daoService.getEntities(Group.class));
     }
 }
