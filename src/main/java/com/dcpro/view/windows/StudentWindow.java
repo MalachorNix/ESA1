@@ -6,12 +6,14 @@ import com.dcpro.entities.Student;
 import com.dcpro.view.NotificationUtils;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.vaadin.event.FieldEvents;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public abstract class StudentWindow extends Window {
@@ -122,6 +124,13 @@ public abstract class StudentWindow extends Window {
             List<Group> list = getDao().getEntities(Group.class);
             groupCombo.removeAllItems();
             groupCombo.addItems(list);
+            Collection<?> itemIds = groupCombo.getItemIds();
+            for (Object itemId : itemIds) {
+                Group itemId1 = (Group) itemId;
+                if (itemId1.getGroupId().equals(student.getGroup().getGroupId())) {
+                    groupCombo.select(itemId1);
+                }
+            }
         });
     }
 
@@ -151,26 +160,20 @@ public abstract class StudentWindow extends Window {
         fields.add(secondNameField);
         for (TextField field : fields) {
             if (field.getValue().length() == 0) {
-                NotificationUtils
-                        .showNotification("Поле " + field.getCaption() + " не заполнено"
-                        );
+                NotificationUtils.showNotification("Поле " + field.getCaption() + " не заполнено");
                 return false;
             }
         }
 
         if (birthDateField.getValue() == null) {
-            NotificationUtils
-                    .showNotification("Поле " + birthDateField.getCaption() + " не заполнено"
-                    );
+            NotificationUtils.showNotification("Поле " + birthDateField.getCaption() + " не заполнено");
             return false;
         }
         long date = birthDateField.getValue().getTime();
         birthDate = new Date(date);
 
         if (group == null) {
-            NotificationUtils
-                    .showNotification("Поле " + groupCombo.getCaption() + " не заполнено"
-                    );
+            NotificationUtils.showNotification("Поле " + groupCombo.getCaption() + " не заполнено");
             return false;
         }
 
@@ -196,6 +199,19 @@ public abstract class StudentWindow extends Window {
         firstNameField.setValue(student.getFirstName());
         secondNameField.setValue(student.getSecondName());
         birthDateField.setValue(student.getBirthDate());
-        groupCombo.setValue(student.getGroup());
+        Collection<?> itemIds = groupCombo.getItemIds();
+
+
+
+        List<Group> list = getDao().getEntities(Group.class);
+        groupCombo.removeAllItems();
+        groupCombo.addItems(list);
+        for (Object itemId : itemIds) {
+            Group itemId1 = (Group) itemId;
+            if (itemId1.getGroupId().equals(student.getGroup().getGroupId())) {
+//                        groupCombo.setValue(itemId1);
+                groupCombo.select(itemId1);
+            }
+        }
     }
 }

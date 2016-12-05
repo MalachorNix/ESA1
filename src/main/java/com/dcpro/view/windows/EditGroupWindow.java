@@ -13,7 +13,6 @@ public class EditGroupWindow extends GroupWindow {
 
     private void updateGroup() {
         if (isValidFieldData()) {
-//            getDao().update(this.getGroup());
             getDao().mergeEntity(this.getGroup());
             this.close();
         }

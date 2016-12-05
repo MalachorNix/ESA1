@@ -16,7 +16,7 @@ public class DAOService {
 
     @Inject
     public DAOService() {
-        factory = Persistence.createEntityManagerFactory("lib-app");
+        factory = Persistence.createEntityManagerFactory("studentDatabase");
     }
 
     @SuppressWarnings("unchecked")
